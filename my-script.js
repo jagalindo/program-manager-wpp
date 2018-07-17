@@ -30,7 +30,7 @@ function listjson(data){
 
   document.getElementById("program").innerHTML="";
 
-  $.getJSON( url ).done(function(data){
+  jQuery.getJSON( url ).done(function(data){
     filteredData=filterJSON(data.rows,strDay,strConf);
     var unique=getUniqueSessions(filteredData);
 		for (var i = 0; i < unique.length; i++){
