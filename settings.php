@@ -129,7 +129,7 @@ class MySettingsPage
     /** 
      * Get the settings option array and print one of its values
      */
-    public function pre_days_callback()
+    public function program_data_url_callback()
     {
         printf(
             '<input type="text" id="program_data_url" name="program_manager_option[program_data_url]" value="%s" />',

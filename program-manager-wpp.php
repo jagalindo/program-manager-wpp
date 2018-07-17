@@ -30,25 +30,22 @@ function write_full(){
 
 	$plugin_options=get_option('program_manager_option');
 	$program_data_url=explode(",",$plugin_options['program_data_url']);	
-	
-	echo <<<EOL
-	<div id="selection">
-  		<select id="day">
-    		<option selected="selected" value="Lunes">Lunes</option>
-   			<option value="Martes">Martes</option>
-    		<option value="Miércoles">Miércoles</option>
+	echo "<div id=\"selection\">
+  		<select id=\"day\">
+    		<option selected=\"selected\" value=\"Lunes\">Lunes</option>
+   			<option value=\"Martes\">Martes</option>
+    		<option value=\"Miércoles\">Miércoles</option>
   		</select>
     
-  		<select id="conf">
-    		<option selected="selected" value="1">PROLE</option>
-    		<option value="2">JISBD</option>
-    		<option value="3">JCIS</option>
+  		<select id=\"conf\">
+    		<option selected=\"selected\" value=\"1\">PROLE</option>
+    		<option value=\"2\">JISBD</option>
+    		<option value=\"3\">JCIS</option>
   		</select>
   
-  		<button onclick="listjson($program_data_url)" type="button">Filtrar</button>
+  		<button onclick=\"listjson('".$program_data_url[0]."')\" type=\"button\">Filtrar</button>
   	</div>
-  	<div id="program"></div>
-	EOL;
+  	<div id=\"program\"></div>";
 
 }
 

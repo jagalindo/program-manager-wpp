@@ -26,7 +26,7 @@ function listjson(data){
   var strConf = conf.options[conf.selectedIndex].value;
 
 //  var url= "http://gsx2json.com/api?id=184lxggv9onMDb9_awsRjmlo8Xe_WGv96tkOa4luTVw8&sheet="+strConf;
-  var url= "http://gsx2json.com/api?id="+data+"&sheet="+strConf;
+  var url= "https://gsx2json.com/api?id="+data+"&sheet="+strConf;
 
   document.getElementById("program").innerHTML="";
 
