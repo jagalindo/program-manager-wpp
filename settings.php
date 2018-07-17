@@ -67,87 +67,9 @@ class MySettingsPage
 	    <div>
 		<p>We do provide the following shotcodes:</p>
 		<p>write_full_program: To write the full program</p>
-		<p>write_dc_program: To write the doctoral symposyum program</p>
-		<p>write_reve_program: To write the REVE program</p>
-		<p>write_dspl_program: To write the DSPL program</p>
-		<p>write_array_program: To write the program metamodel</p>
-		<p>write_glance_program: To write the program at a glance</p>
-        <p>write_room_program: To write the listo of rooms per day<p>
 	    </div>
 	</div>
 
-<script>
-    jQuery(document).ready(function($){
-    var main_custom_uploader;
-        var pre_custom_uploader;
- 
-
-
-    $('#pre_upload_file_button').click(function(e) {
-         
-        e.preventDefault();
-  
-        //If the uploader object has already been created, reopen the dialog
-        if (pre_custom_uploader) {
-            pre_custom_uploader.open();
-            return;
-        }
-
-        //Extend the wp.media object
-        pre_custom_uploader =  wp.media.frames.file_frame = wp.media({
-            title: 'Choose File',
-            button: {
-                text: 'Choose File'
-            },
-            multiple: true
-        });
-
-        //When a file is selected, grab the URL and set it as the text field's value
-        pre_custom_uploader.on('select', function() {
-            console.log(pre_custom_uploader.state().get('selection').toJSON());
-            attachment = pre_custom_uploader.state().get('selection').first().toJSON();
-            $('#pre_days_file').val(attachment.url);
-        });
-
-        //Open the uploader dialog
-        pre_custom_uploader.open();
-
-    });
-
-
-    $('#main_upload_file_button').click(function(e) {
-         
-        e.preventDefault();
-            //If the uploader object has already been created, reopen the dialog
-        if (main_custom_uploader) {
-            main_custom_uploader.open();
-            return;
-        }
-
-        //Extend the wp.media object
-        main_custom_uploader = wp.media.frames.file_frame = wp.media({
-            title: 'Choose File',
-            button: {
-                text: 'Choose File'
-            },
-            multiple: true
-        });
-
-        //When a file is selected, grab the URL and set it as the text field's value
-        main_custom_uploader.on('select', function() {
-            console.log(main_custom_uploader.state().get('selection').toJSON());
-            attachment = main_custom_uploader.state().get('selection').first().toJSON();
-            $('#main_days_file').val(attachment.url);
-        });
-
-        //Open the uploader dialog
-        main_custom_uploader.open();
-
-    });
-
-
-});
-    </script>
 
 
 	<?php
@@ -172,36 +94,13 @@ class MySettingsPage
         );  
 
         add_settings_field(
-            'pre_days', // ID
-            'PRE conference days (separated by ,)', // Title 
-            array( $this, 'pre_days_callback' ), // Callback
+            'program_data_url', // ID
+            'Google sheets URL', // Title 
+            array( $this, 'program_data_url_callback' ), // Callback
             'program_manager_admin', // Page
             'program_manager_section_id' // Section           
         );      
 
-        add_settings_field(
-            'main_days', 
-            'MAIN conference days (separated by ,)', 
-            array( $this, 'main_days_callback' ), 
-            'program_manager_admin', 
-            'program_manager_section_id'
-        );      
- 
-	add_settings_field(
-            'pre_days_file', // ID
-            'PRE conference xlsx file', // Title 
-            array( $this, 'pre_days_file_callback' ), // Callback
-            'program_manager_admin', // Page
-            'program_manager_section_id' // Section           
-        );      
-
-        add_settings_field(
-            'main_days_file', 
-            'MAIN conference xlsx file', 
-            array( $this, 'main_days_file_callback' ), 
-            'program_manager_admin', 
-            'program_manager_section_id'
-        );      
  
     }
 
@@ -213,19 +112,8 @@ class MySettingsPage
     public function sanitize( $input )
     {
         $new_input = array();
-        if( isset( $input['pre_days'] ) )
-            $new_input['pre_days'] = sanitize_text_field( $input['pre_days'] );
-
-        if( isset( $input['pre_days_file'] ) )
-            $new_input['pre_days_file'] = sanitize_text_field( $input['pre_days_file'] );
-	
-	if( isset( $input['main_days'] ) )
-            $new_input['main_days'] = sanitize_text_field( $input['main_days'] );
-
-       if( isset( $input['main_days_file'] ) )
-            $new_input['main_days_file'] = sanitize_text_field( $input['main_days_file'] );
-
-
+        if( isset( $input['program_data_url'] ) )
+            $new_input['program_data_url'] = sanitize_text_field( $input['program_data_url'] );
         return $new_input;
     }
 
@@ -244,46 +132,12 @@ class MySettingsPage
     public function pre_days_callback()
     {
         printf(
-            '<input type="text" id="pre_days" name="program_manager_option[pre_days]" value="%s" />',
-            isset( $this->options['pre_days'] ) ? esc_attr( $this->options['pre_days']) : ''
+            '<input type="text" id="program_data_url" name="program_manager_option[program_data_url]" value="%s" />',
+            isset( $this->options['program_data_url'] ) ? esc_attr( $this->options['program_data_url']) : ''
         );
     }
 
-    /** 
-     * Get the settings option array and print one of its values
-     */
-    public function main_days_callback()
-    {
-        printf(
-            '<input type="text" id="main_days" name="program_manager_option[main_days]" value="%s" />',
-            isset( $this->options['main_days'] ) ? esc_attr( $this->options['main_days']) : ''
-        );
-    }
-
-    /** 
-     * Get the settings option array and print one of its values
-     */
-    public function pre_days_file_callback()
-    {
-        printf(
-   		'<input id="pre_days_file" type="text" size="36" name="program_manager_option[pre_days_file]" value="%s" /> 
-    		<input id="pre_upload_file_button" class="button" type="button" value="Upload/Select PRE File" />',
-	    isset( $this->options['pre_days_file'] ) ? esc_attr( $this->options['pre_days_file']) : ''
-        );
-    }
    
-    /** 
-     * Get the settings option array and print one of its values
-     */
-    public function main_days_file_callback()
-    {
-        printf(
-            	'<input id="main_days_file" type="text" size="36" name="program_manager_option[main_days_file]" value="%s" /> 
-    		<input id="main_upload_file_button" class="button" type="button" value="Upload/Select MAIN File" />',
-         
-            isset( $this->options['main_days_file'] ) ? esc_attr( $this->options['main_days_file']) : ''
-        );
-    }
  
  
 }
